@@ -1,0 +1,35 @@
+name: PAMS CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build
+        run: mvn --batch-mode clean compile
+
+      - name: Test
+        run: mvn --batch-mode test
+
+      - name: Package
+        run: mvn --batch-mode package -DskipTests
